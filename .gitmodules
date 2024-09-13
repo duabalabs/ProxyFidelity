@@ -1,0 +1,9 @@
+[submodule "react-nextjs"]
+	path = react-nextjs
+	url = https://github.com/duabalabs/ProxyFidelity-react-nextjs.git
+[submodule "react"]
+	path = react
+	url = https://github.com/duabalabs/ProxyFidelity-react.git
+[submodule "parse-server"]
+	path = parse-server
+	url = https://github.com/duabalabs/ProxyFidelity-parse-server.git
