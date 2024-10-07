@@ -6,10 +6,15 @@ module.exports = {
         cwd: "./parse-server",
       },
       {
-        name: "nextjs",
-        script: "yarn start",
-        cwd: "./react-nextjs",
+        name: "react",
+        script: "yarn start --host",
+        cwd: "./react",
       },
+      // {
+      //   name: "nextjs",
+      //   script: "yarn start",
+      //   cwd: "./react-nextjs",
+      // },
     ],
   };
   
