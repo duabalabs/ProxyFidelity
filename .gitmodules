@@ -7,3 +7,6 @@
 [submodule "parse-server"]
 	path = parse-server
 	url = https://github.com/duabalabs/ProxyFidelity-parse-server.git
+[submodule "landing-page"]
+	path = landing-page
+	url = https://github.com/duabalabs/proxyfidelity-landing
