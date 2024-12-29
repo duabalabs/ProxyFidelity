@@ -1,0 +1,65 @@
+# Main HTTPS server block for proxyfidelity.com and www.proxyfidelity.com
+server {
+    server_name proxyfidelity.com www.proxyfidelity.com;
+
+    # React Landing app
+    root /var/www/landing-page;
+    index index.html;
+
+    location / {
+        try_files $uri /index.html; # Redirects all SPA routes to index.html
+    }
+
+    # Parse Server
+    location /parse {
+        proxy_pass http://127.0.0.1:1337/parse;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
+
+    # Parse Dashboard
+    location /dashboard {
+        proxy_pass http://127.0.0.1:1337/dashboard;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/proxyfidelity.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/proxyfidelity.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+# HTTPS block for my.proxyfidelity.com
+server {
+    server_name my.proxyfidelity.com;
+
+    root /var/www/dashboard-page;
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;  # Redirects all routes to index.html for SPA routing
+    }
+
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/proxyfidelity.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/proxyfidelity.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+# Unified HTTP to HTTPS redirect for all domains
+server {
+    listen 80;
+    server_name proxyfidelity.com www.proxyfidelity.com my.proxyfidelity.com;
+
+    return 301 https://$host$request_uri;
+}
